@@ -67,7 +67,7 @@ def classifyNB(vec2Classify, p0Vec, p1Vec, pClass1):
     pW_c0 = vec2Classify * p0Vec
     for i in pW_c0:
         p0 *= i
-    p0 *= 1 - pClass1
+    p0 *= 1.0 - pClass1
 
     if p1 > p0:
         return 1
@@ -83,12 +83,12 @@ def testingNB():
         trainMat.append(setOfWords2Vec(myVocabList, postinDoc))
         p0V, p1V, pAb = trainNB(trainMat, listClasses)
 
-        testEntry = ['love', 'my', 'dalmation']
-        thisDoc = setOfWords2Vec(myVocabList, testEntry)
-        print(testEntry, 'classified as: ', classifyNB(thisDoc, p0V, p1V, pAb))
+    testEntry = ['love', 'my', 'dalmation']
+    thisDoc = setOfWords2Vec(myVocabList, testEntry)
+    print(testEntry, 'classified as: ', classifyNB(thisDoc, p0V, p1V, pAb))
 
-        testEntry = ['stupid', 'garbage']
-        thisDoc = setOfWords2Vec(myVocabList, testEntry)
-        print(testEntry, 'classified as: ', classifyNB(thisDoc, p0V, p1V, pAb))
+	testEntry = ['stupid', 'garbage']
+    thisDoc = setOfWords2Vec(myVocabList, testEntry)
+    print(testEntry, 'classified as: ', classifyNB(thisDoc, p0V, p1V, pAb))
 
 testingNB()
