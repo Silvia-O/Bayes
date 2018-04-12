@@ -51,7 +51,7 @@ def trainNB(trainMatrix, trainCategory):
             p0Denom += sum(trainMatrix[i])
     p1Vec = p1Num / p1Denom
     p0Vec = p0Num / p0Denom
-    return p1Vec, p0Vec, pAbusive
+    return p0Vec, p1Vec, pAbusive
 
 
 # Test algorithm
