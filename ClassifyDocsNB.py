@@ -37,11 +37,17 @@ def trainNB(trainMatrix, trainCategory):
     numTrainDocs = len(trainMatrix)
     numWords = len(trainMatrix[0])  # number of words in my vocabulary
     pAbusive = sum(trainCategory) / float(numTrainDocs)  # propability of abusive docs
-    p0Num = zeros(numWords)
-    p1Num = zeros(numWords)
-    p0Denom = 0.0
-    p1Denom = 0.0
 
+    # ----- modification -----
+    #p0Num = zeros(numWords)
+    #p1Num = zeros(numWords)
+    #p0Denom = 0.0
+    #p1Denom = 0.0
+    p0Num = ones(numWords)
+    p1Num = ones(numWords)
+    p0Denom = 2.0
+    p1Denom = 2.0
+    # ------------------------
     for i in range(numTrainDocs):
         if trainCategory[i] == 1:
             p1Num += trainMatrix[i]
@@ -49,26 +55,33 @@ def trainNB(trainMatrix, trainCategory):
         else:
             p0Num += trainMatrix[i]
             p0Denom += sum(trainMatrix[i])
-    p1Vec = p1Num / p1Denom
-    p0Vec = p0Num / p0Denom
+    # ----- modification -----
+    #p1Vec = p1Num / p1Denom
+    #p0Vec = p0Num / p0Denom
+    p1Vec = log(p1Num / p1Denom)
+    p0Vec = log(p0Num / p0Denom)
+    # ------------------------
     return p0Vec, p1Vec, pAbusive
 
 
 # Test algorithm
 def classifyNB(vec2Classify, p0Vec, p1Vec, pClass1):
-    p1 = 1
-    p0 = 1
+    # ----- modification -----
+    #p1 = 1
+    #p0 = 1
     # p(ci,W) = p(W|ci) * p(ci) = p(w0|ci) * p(w1|ci) * ... * p(wn|ci) * p(ci)
-    pW_c1 = vec2Classify * p1Vec
-    for i in pW_c1:
-        p1 *= i
-    p1 *= pClass1
+    #pW_c1 = vec2Classify * p1Vec
+    #for i in pW_c1:
+    #    p1 *= i
+    #p1 *= pClass1
 
-    pW_c0 = vec2Classify * p0Vec
-    for i in pW_c0:
-        p0 *= i
-    p0 *= 1.0 - pClass1
-
+    #pW_c0 = vec2Classify * p0Vec
+    #for i in pW_c0:
+    #    p0 *= i
+    #p0 *= 1.0 - pClass1
+    p1 = sum(vec2Classify * p1Vec) + log(pClass1)
+    p0 = sum(vec2Classify * p0Vec) + log(1.0 - pClass1)
+    # ------------------------
     if p1 > p0:
         return 1
     else:
@@ -87,7 +100,7 @@ def testingNB():
     thisDoc = setOfWords2Vec(myVocabList, testEntry)
     print(testEntry, 'classified as: ', classifyNB(thisDoc, p0V, p1V, pAb))
 
-	testEntry = ['stupid', 'garbage']
+    testEntry = ['stupid', 'garbage']
     thisDoc = setOfWords2Vec(myVocabList, testEntry)
     print(testEntry, 'classified as: ', classifyNB(thisDoc, p0V, p1V, pAb))
 
